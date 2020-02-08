@@ -7,10 +7,7 @@ if empty(glob('~/.vim/autoload/plug.vim'))
   autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
 call plug#begin()
-" alternatively, pass a path where Vundle should install plugins
-"call vundle#begin('~/some/path/here')
 
-" let Vundle manage Vundle, required
 Plug 'tomasr/molokai'
 Plug 'vim-airline/vim-airline'
 "Plug 'ervandew/supertab'
@@ -28,40 +25,6 @@ Plug 'preservim/nerdcommenter'
 Plug 'tpope/vim-surround'
 
 call plug#end()            " required
-
-"""""""""""""""""""""""""""
-" => Personal Plugins
-"""""""""""""""""""""""""""
-
-" Put your non-Plugin stuff after this line
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Maintainer: 
-"       Amir Salihefendic — @amix3k
-"
-" Awesome_version:
-"       Get this config, nice color schemes and lots of plugins!
-"
-"       Install the awesome version from:
-"
-"           https://github.com/amix/vimrc
-"
-" Sections:
-"    -> General
-"    -> VIM user interface
-"    -> Colors and Fonts
-"    -> Files and backups
-"    -> Text, tab and indent related
-"    -> Visual mode related
-"    -> Moving around, tabs and buffers
-"    -> Status line
-"    -> Editing mappings
-"    -> vimgrep searching and cope displaying
-"    -> Spell checking
-"    -> Misc
-"    -> Helper functions
-"
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => General
@@ -182,8 +145,6 @@ set noswapfile
 " Return to last edit position when opening files (You want this!)
 au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
 
-
-
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Text, tab and indent related
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -295,8 +256,6 @@ onoremap il( :<c-u>normal! F)vi(<cr>
 " => Abbreviations
 """""""""""""""""""""""""""""""
 
-" Has benn moved to autocmd
-"iabbrev head Author : Huaiyi Zhao<cr>Email  : huaiyizhao@gmail.com
 
 """""""""""""""""""""""""""""""
 " => Personal Plugin
@@ -320,9 +279,14 @@ function! s:GrepOperator(type)
     let @@ = saved_unnamed_register
 endfunction
 
+nnoremap <leader>g :set operatorfunc=<SID>GrepOperator<cr>g@
+vnoremap <leader>g :<c-u>call <SID>GrepOperator(visualmode())<cr>
 
 
+"""""""""""""""""""""""""""""""
 " Plugin configuration
+"""""""""""""""""""""""""""""""
+
 " ============NERDTree=============
 nnoremap <leader>nt :NERDTreeToggle<CR>
 let g:NERDTreeMapJumpParent='-'
@@ -339,8 +303,6 @@ let g:ycm_global_ycm_extra_conf="/Users/zhaohuaiyi/.vim/plugged/youcompleteme/th
 let g:ycm_autoclose_preview_window_after_completion = 1
 " ============airline=============
 let g:airline#extensions#tabline#enabled = 1
-nnoremap <leader>g :set operatorfunc=<SID>GrepOperator<cr>g@
-vnoremap <leader>g :<c-u>call <SID>GrepOperator(visualmode())<cr>
 " ============Ultisnips=============
 " Trigger configuration. Do not use <tab> if you use https://github.com/Valloric/YouCompleteMe.
 let g:UltiSnipsExpandTrigger="<c-j>"
