@@ -1,6 +1,6 @@
 [user]
 	name = Huaiyi Zhao
-	email = stormragezhao@gmail.com
+	email = huaiyizhao@gmail.com
 [filter "lfs"]
 	required = true
 	clean = git-lfs clean -- %f
