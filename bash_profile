@@ -7,6 +7,8 @@ export PATH=$PATH:~/bin
 
 alias ls="ls -G"
 alias ll="ls -lhG"
+alias python="python3"
+alias pip="pip3"
 # ssh
 alias pullcode="scp -r zhy@10.21.2.185:~/dataset/src Desktop/"
 alias jumpw="ssh -fNT -D 8192 root@168.235.98.214"

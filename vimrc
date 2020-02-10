@@ -170,6 +170,8 @@ set wrap "Wrap lines
 """"""""""""""""""""""""""""""
 " => Some useful mappings
 """"""""""""""""""""""""""""""
+" 0 jump to non-blank character
+nnoremap 0 ^
 " With a map leader it's possible to do extra key combinations
 " like <leader>w saves the current file
 let mapleader = " "
