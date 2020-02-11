@@ -16,6 +16,7 @@ Plug 'valloric/youcompleteme'
 Plug 'SirVer/ultisnips'
 " Snippets are separated from the engine. Add this if you want them:
 Plug 'honza/vim-snippets'
+" File explorer
 Plug 'scrooloose/nerdtree'
 " Git integration
 Plug 'tpope/vim-fugitive'
@@ -23,6 +24,10 @@ Plug 'tpope/vim-fugitive'
 Plug 'preservim/nerdcommenter'
 " Easy change and add surroundings
 Plug 'tpope/vim-surround'
+" Tag list
+Plug 'majutsushi/tagbar'
+" Move around
+Plug 'easymotion/vim-easymotion'
 
 call plug#end()            " required
 
@@ -116,7 +121,7 @@ set tm=500
 set foldcolumn=1
 
 " show only menu when complete
-set cot=menuone
+ set completeopt=menu
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Colors and Fonts
@@ -218,10 +223,11 @@ map <leader>cd :cd %:p:h<cr>:pwd<cr>
 nnoremap <leader>sv :source $MYVIMRC<cr>
 nnoremap <leader>ev :vsplit $MYVIMRC<cr>
 
+" Save to mac's clipboard
+nnoremap <leader>cp :%w !pbcopy
+
 " Disable highlight when <leader><cr> is pressed
 nnoremap <silent> <leader><cr> :noh<cr>
-
-
 
 " Autocomplete { , useful in C family language
 inoremap {<CR>  {<CR>}<Esc>O
@@ -239,7 +245,12 @@ nnoremap <leader>' viw<esc>a'<esc>bi'<esc>lel
 inoremap jk <esc>
 " Force me to abandon escape key on stupid touchbar
 "inoremap <esc> <nop>
+" Open the last buffer on the right
+nnoremap <leader>lb :execute "rightbelow vsplit " . bufname("#")<cr>
 
+"""""""""""""""""""""""""""""""
+" => Move around
+"""""""""""""""""""""""""""""""
 " jump to the previous function
 nnoremap <silent> [f :call
 \ search('\(\(if\\|for\\|while\\|switch\\|catch\)\_s*\)\@64<!(\_[^)]*)\_[^;{}()]*\zs{', "bw")<CR>
@@ -247,8 +258,10 @@ nnoremap <silent> [f :call
 nnoremap <silent> ]f :call
 \ search('\(\(if\\|for\\|while\\|switch\\|catch\)\_s*\)\@64<!(\_[^)]*)\_[^;{}()]*\zs{', "w")<CR>
 
-" Open the last buffer on the right
-nnoremap <leader>lb :execute "rightbelow vsplit " . bufname("#")<cr>
+" use j k to move in visual lines
+nnoremap j gj
+nnoremap k gk
+
 """""""""""""""""""""""""""""""
 " => Operator-Pending Mappings
 """""""""""""""""""""""""""""""
@@ -301,8 +314,21 @@ let g:netrw_browse_split = 2
 let g:netrw_altv = 1
 let g:netrw_winsize = 20
 " ============ycm=============
+let g:ycm_key_invoke_completion = '<c-k>'
+let g:ycm_semantic_triggers =  {
+			\ 'c': ['re!\w{2}'],
+			\ }
+let g:ycm_python_interpreter_path = '/usr/local/bin/python3'
+let g:ycm_python_sys_path = []
+let g:ycm_extra_conf_vim_data = [
+  \  'g:ycm_python_interpreter_path',
+  \  'g:ycm_python_sys_path'
+  \]
 let g:ycm_global_ycm_extra_conf="/Users/zhaohuaiyi/.vim/plugged/youcompleteme/third_party/ycmd/.ycm_extra_conf.py"
+let g:ycm_add_preview_to_completeopt = 0
+let g:ycm_seed_identifiers_with_syntax = 1
 let g:ycm_autoclose_preview_window_after_completion = 1
+let g:ycm_collect_identifiers_from_tags_files = 1
 " ============airline=============
 let g:airline#extensions#tabline#enabled = 1
 " ============Ultisnips=============
@@ -320,3 +346,17 @@ let g:UltiSnipsJumpBackwardTrigger="<c-b>"
 " ds<target>
 " <visual>S<target>
 " yss<target> operates on current line
+" ============TagBar=============
+nmap <leader>t :TagbarToggle<CR>
+let g:tagbar_autofocus = 1
+let g:tagbar_sort = 0
+" ============EasyMotion=============
+let g:EasyMotion_do_mapping = 0 " Disable default mappings
+" notice below can't use noremap because of <Plug>
+nmap <leader>s <Plug>(easymotion-overwin-f2)
+nmap <leader>l <Plug>(easymotion-lineforward)
+nmap <leader>j <Plug>(easymotion-j)
+nmap <leader>k <Plug>(easymotion-k)
+nmap <leader>h <Plug>(easymotion-linebackward)
+nmap <leader>/ <Plug>(easymotion-sn)
+
