@@ -28,6 +28,10 @@ Plug 'tpope/vim-surround'
 Plug 'majutsushi/tagbar'
 " Move around
 Plug 'easymotion/vim-easymotion'
+" Show git diff on col
+Plug 'airblade/vim-gitgutter'
+" Tag file auto generation
+Plug 'xolox/vim-easytags'
 
 call plug#end()            " required
 
