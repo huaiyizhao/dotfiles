@@ -373,4 +373,5 @@ nmap [h <Plug>(GitGutterPrevHunk)
 " <leader>hu to undo a hunk
 " <leader>hp to preview a hunk (useful when deleted)
 " ============CtrlP=============
-let g:ctrlp_cmd = 'CtrlPMRU'
+" Change default mode to save time when invoking from a large directory 
+let g:ctrlp_cmd = 'CtrlPMRU' 
