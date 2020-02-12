@@ -31,7 +31,7 @@ Plug 'easymotion/vim-easymotion'
 " Show git diff on col
 Plug 'airblade/vim-gitgutter'
 " Tag file auto generation
-Plug 'xolox/vim-easytags'
+Plug 'ludovicchabant/vim-gutentags'
 
 call plug#end()            " required
 
@@ -320,8 +320,8 @@ let g:netrw_winsize = 20
 " ============ycm=============
 let g:ycm_key_invoke_completion = '<c-k>'
 let g:ycm_semantic_triggers =  {
-			\ 'c': ['re!\w{2}'],
-			\ }
+    \ 'c': ['re!\w{2}'],
+    \}
 let g:ycm_python_interpreter_path = '/usr/local/bin/python3'
 let g:ycm_python_sys_path = []
 let g:ycm_extra_conf_vim_data = [
@@ -363,4 +363,11 @@ nmap <leader>j <Plug>(easymotion-j)
 nmap <leader>k <Plug>(easymotion-k)
 nmap <leader>h <Plug>(easymotion-linebackward)
 nmap <leader>/ <Plug>(easymotion-sn)
+" ============gitgutter=============
+set updatetime=200
+nmap ]h <Plug>(GitGutterNextHunk)
+nmap [h <Plug>(GitGutterPrevHunk)
+" <leader>hs to stage a hunk
+" <leader>hu to undo a hunk
+" <leader>hp to preview a hunk (useful when deleted)
 
