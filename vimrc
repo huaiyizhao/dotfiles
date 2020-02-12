@@ -32,6 +32,8 @@ Plug 'easymotion/vim-easymotion'
 Plug 'airblade/vim-gitgutter'
 " Tag file auto generation
 Plug 'ludovicchabant/vim-gutentags'
+" Fuzzy finder
+Plug 'ctrlpvim/ctrlp.vim'
 
 call plug#end()            " required
 
@@ -218,7 +220,7 @@ endfunction
 " Easy switch between buffers and tabs
 nnoremap <leader>bn :bn<cr>
 nnoremap <leader>bb :bp<cr>
-nnoremap <leader>tn :tabNext<cr>
+nnoremap <leader>tn :tabnext<cr>
 nnoremap <leader>tb :tabprevious<cr>
 " Switch CWD to the directory of the open buffer
 map <leader>cd :cd %:p:h<cr>:pwd<cr>
@@ -351,8 +353,8 @@ let g:UltiSnipsJumpBackwardTrigger="<c-b>"
 " <visual>S<target>
 " yss<target> operates on current line
 " ============TagBar=============
-nmap <leader>t :TagbarToggle<CR>
-let g:tagbar_autofocus = 1
+nmap <leader>tt :TagbarToggle<CR>
+let g:tagbar_autofocus = 0
 let g:tagbar_sort = 0
 " ============EasyMotion=============
 let g:EasyMotion_do_mapping = 0 " Disable default mappings
@@ -370,4 +372,5 @@ nmap [h <Plug>(GitGutterPrevHunk)
 " <leader>hs to stage a hunk
 " <leader>hu to undo a hunk
 " <leader>hp to preview a hunk (useful when deleted)
-
+" ============CtrlP=============
+let g:ctrlp_cmd = 'CtrlPMRU'
