@@ -1,3 +1,7 @@
+" reminder
+" in search :s/\v turn on very magic and you don't need to write a lot of \
+"           .{-} is the none greedy mode for .*?
+" in replace :s/(some regex)/\1/ \1 refer to the first selected regex parttern
 set nocompatible              " be iMproved, required
 filetype off                  " required
 
@@ -34,7 +38,8 @@ Plug 'airblade/vim-gitgutter'
 Plug 'ludovicchabant/vim-gutentags'
 " Fuzzy finder
 Plug 'ctrlpvim/ctrlp.vim'
-
+" Undo tree
+Plug 'sjl/gundo.vim'
 call plug#end()            " required
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -375,3 +380,6 @@ nmap [h <Plug>(GitGutterPrevHunk)
 " ============CtrlP=============
 " Change default mode to save time when invoking from a large directory 
 let g:ctrlp_cmd = 'CtrlPMRU' 
+" ============Gundo=============
+let g:gundo_prefer_python3=1
+nnoremap <leader>ud :GundoToggle<CR>
