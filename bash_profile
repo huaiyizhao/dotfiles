@@ -5,6 +5,9 @@ export PATH=$PATH:/usr/local/Cellar/python
 export PATH=$PATH:/usr/local/sbin
 export PATH=$PATH:~/bin
 
+# for easy use of gdb and gcc
+alias gcc="gcc-9"
+alias gdb="sudo gdb"
 # use vi style command line input
 #set -o vi
 alias ls="ls -G"
