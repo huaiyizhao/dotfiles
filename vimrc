@@ -129,11 +129,12 @@ set tm=500
 
 
 " Add a bit extra margin to the left
-set foldcolumn=1
+"set foldcolumn=1
 
 " show only menu when complete
- set completeopt=menu
+set completeopt=menu
 
+set formatoptions+=tl
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Colors and Fonts
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -176,12 +177,13 @@ set shiftwidth=4
 set tabstop=4
 
 " Linebreak on 100 characters
-set lbr
-set tw=100
+"set lbr
+"set tw=100
 
 set ai "Auto indent
 set si "Smart indent
 set wrap "Wrap lines
+set showbreak=>\ 
 
 """"""""""""""""""""""""""""""
 " => Some useful mappings
@@ -192,7 +194,10 @@ nnoremap 0 ^
 " like <leader>w saves the current file
 let mapleader = " "
 let maplocalleader = ","
-
+" paste with smart indent
+" remider g; jump to last modified place
+nnoremap p p=`]
+nnoremap P P=`]
 " Fast saving
 nnoremap <leader>w :w!<cr>
 nnoremap <leader>wq :wq!<cr>
@@ -347,6 +352,9 @@ let g:airline#extensions#tabline#enabled = 1
 let g:UltiSnipsExpandTrigger="<c-j>"
 let g:UltiSnipsJumpForwardTrigger="<c-j>"
 let g:UltiSnipsJumpBackwardTrigger="<c-b>"
+let g:snips_author="Huaiyi Zhao"
+let g:snips_email="huaiyizhao@gmail.com"
+let g:snips_github="huaiyizhao"
 " ============Nerdcommenter=============
 " <leader>cc comment 
 " <leader>cu uncoment

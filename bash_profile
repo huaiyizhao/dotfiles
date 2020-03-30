@@ -5,6 +5,8 @@ export PATH=$PATH:/usr/local/Cellar/python
 export PATH=$PATH:/usr/local/sbin
 export PATH=$PATH:~/bin
 
+# use vi style command line input
+#set -o vi
 alias ls="ls -G"
 alias ll="ls -lhG"
 alias python="python3"
