@@ -14,6 +14,7 @@ call plug#begin()
 
 Plug 'tomasr/molokai'
 Plug 'vim-airline/vim-airline'
+Plug 'ap/vim-css-color'
 "Plug 'ervandew/supertab'
 Plug 'valloric/youcompleteme'
 " Track the engine.
@@ -228,19 +229,29 @@ function! VisualSelection(direction, extra_filter) range
 endfunction
 
 " Easy switch between buffers and tabs
-nnoremap <leader>bn :bn<cr>
-nnoremap <leader>bb :bp<cr>
-nnoremap <leader>tn :tabnext<cr>
-nnoremap <leader>tb :tabprevious<cr>
+nnoremap <leader>n :bn<cr>
+nnoremap <leader>b :bp<cr>
+"nnoremap <leader>tn :tabnext<cr>
+"nnoremap <leader>tb :tabprevious<cr>
+" Go to tab by number
+noremap <leader>1 1gt
+noremap <leader>2 2gt
+noremap <leader>3 3gt
+noremap <leader>4 4gt
+noremap <leader>5 5gt
+noremap <leader>6 6gt
+noremap <leader>7 7gt
+noremap <leader>8 8gt
+noremap <leader>9 9gt
 " Switch CWD to the directory of the open buffer
-map <leader>cd :cd %:p:h<cr>:pwd<cr>
+map ,cd :cd %:p:h<cr>:pwd<cr>
 
 " Shortcuts to modify vimrc file
-nnoremap <leader>sv :source $MYVIMRC<cr>
-nnoremap <leader>ev :vsplit $MYVIMRC<cr>
+nnoremap ,sv :source $MYVIMRC<cr>
+nnoremap ,ev :vsplit $MYVIMRC<cr>
 
 " Save to mac's clipboard
-nnoremap <leader>cp :%w !pbcopy
+nnoremap ,cp :%w !pbcopy
 
 " Disable highlight when <leader><cr> is pressed
 nnoremap <silent> <leader><cr> :noh<cr>
@@ -293,25 +304,25 @@ onoremap il( :<c-u>normal! F)vi(<cr>
 """""""""""""""""""""""""""""""
 
 " ============ grep code =====================
-function! s:GrepOperator(type)
-    let saved_unnamed_register = @@
+"function! s:GrepOperator(type)
+    "let saved_unnamed_register = @@
 
-    if a:type ==# 'v'
-        normal! `<v`>y
-    elseif a:type ==# 'char'
-        normal! `[v`]y
-    else
-        return
-    endif
+    "if a:type ==# 'v'
+        "normal! `<v`>y
+    "elseif a:type ==# 'char'
+        "normal! `[v`]y
+    "else
+        "return
+    "endif
 
-    silent execute "grep! -R " . shellescape(@@) . " ."
-    copen
+    "silent execute "grep! -R " . shellescape(@@) . " ."
+    "copen
 
-    let @@ = saved_unnamed_register
-endfunction
+    "let @@ = saved_unnamed_register
+"endfunction
 
-nnoremap <leader>g :set operatorfunc=<SID>GrepOperator<cr>g@
-vnoremap <leader>g :<c-u>call <SID>GrepOperator(visualmode())<cr>
+"nnoremap <leader>g :set operatorfunc=<SID>GrepOperator<cr>g@
+"vnoremap <leader>g :<c-u>call <SID>GrepOperator(visualmode())<cr>
 
 
 """""""""""""""""""""""""""""""
@@ -319,7 +330,7 @@ vnoremap <leader>g :<c-u>call <SID>GrepOperator(visualmode())<cr>
 """""""""""""""""""""""""""""""
 
 " ============NERDTree=============
-nnoremap <leader>nt :NERDTreeToggle<CR>
+nnoremap ,nt :NERDTreeToggle<CR>
 let g:NERDTreeMapJumpParent='-'
 let g:NERDTreeMapPreview='p'
 " Close vim when only NERDTree left
@@ -347,6 +358,7 @@ let g:ycm_autoclose_preview_window_after_completion = 1
 let g:ycm_collect_identifiers_from_tags_files = 1
 " ============airline=============
 let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#left_alt_sep = '>'
 " ============Ultisnips=============
 " Trigger configuration. Do not use <tab> if you use https://github.com/Valloric/YouCompleteMe.
 let g:UltiSnipsExpandTrigger="<c-j>"
@@ -366,7 +378,7 @@ let g:snips_github="huaiyizhao"
 " <visual>S<target>
 " yss<target> operates on current line
 " ============TagBar=============
-nmap <leader>tt :TagbarToggle<CR>
+nmap ,tt :TagbarToggle<CR>
 let g:tagbar_autofocus = 0
 let g:tagbar_sort = 0
 " ============EasyMotion=============
@@ -390,4 +402,4 @@ nmap [h <Plug>(GitGutterPrevHunk)
 let g:ctrlp_cmd = 'CtrlPMRU' 
 " ============Gundo=============
 let g:gundo_prefer_python3=1
-nnoremap <leader>ud :GundoToggle<CR>
+nnoremap ,ud :GundoToggle<CR>
