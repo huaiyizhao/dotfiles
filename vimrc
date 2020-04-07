@@ -41,6 +41,8 @@ Plug 'ludovicchabant/vim-gutentags'
 Plug 'ctrlpvim/ctrlp.vim'
 " Undo tree
 Plug 'sjl/gundo.vim'
+" Autoformat
+Plug 'chiel92/vim-autoformat'
 call plug#end()            " required
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -403,3 +405,9 @@ let g:ctrlp_cmd = 'CtrlPMRU'
 " ============Gundo=============
 let g:gundo_prefer_python3=1
 nnoremap ,ud :GundoToggle<CR>
+" ============autoformat=============
+au BufWrite * :Autoformat
+let g:autoformat_autoindent = 0
+let g:autoformat_retab = 0
+let g:autoformat_remove_trailing_spaces = 0
+
