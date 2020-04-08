@@ -203,7 +203,7 @@ nnoremap p p=`]
 nnoremap P P=`]
 " Fast saving
 nnoremap <leader>w :w!<cr>
-nnoremap <leader>wq :wq!<cr>
+"nnoremap <leader>wq :wq!<cr>
 nnoremap <leader>qq :q!<cr>
 
 " Change case for the word before 
