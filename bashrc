@@ -42,6 +42,10 @@ elif [ -f /etc/bash_completion ]; then
 	source /etc/bash_completion;
 fi;
 
+for f in /usr/local/etc/bash_completion.d/*; do
+    source $f;
+done
+
 
 test -e "${HOME}/.iterm2_shell_integration.bash" && source "${HOME}/.iterm2_shell_integration.bash"
 

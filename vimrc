@@ -204,7 +204,7 @@ nnoremap P P=`]
 " Fast saving
 nnoremap <leader>w :w!<cr>
 "nnoremap <leader>wq :wq!<cr>
-nnoremap <leader>qq :q!<cr>
+nnoremap <leader>q :q<cr>
 
 " Change case for the word before 
 inoremap <c-u> <esc>vb~ea
@@ -253,7 +253,67 @@ nnoremap ,sv :source $MYVIMRC<cr>
 nnoremap ,ev :vsplit $MYVIMRC<cr>
 
 " Save to mac's clipboard
-nnoremap ,cp :%w !pbcopy
+nnoremap ,cp :%w !pbcopy<cr>
+
+
+"====================terminal========================
+"function! ExitNormalMode()
+    "unmap <buffer> <silent> <RightMouse>
+    "call feedkeys("a")
+"endfunction
+
+"function! EnterNormalMode()
+    "if &buftype == 'terminal' && mode('') == 't'
+        "call feedkeys("\<c-w>N")
+        "call feedkeys("\<c-y>")
+        "map <buffer> <silent> <RightMouse> :call ExitNormalMode()<CR>
+    "endif
+"endfunction
+
+"tmap <silent> <ScrollWheelUp> <c-w>:call EnterNormalMode()<CR>
+nnoremap ,te :vertical terminal<cr>
+function s:exec_on_term(lnum1, lnum2)
+  " get terminal buffer
+  let g:terminal_buffer = get(g:, 'terminal_buffer', -1)
+  " open new terminal if it doesn't exist
+  if g:terminal_buffer == -1 || !bufexists(g:terminal_buffer)
+    terminal
+    let g:terminal_buffer = bufnr('')
+    wincmd L
+  " split a new window if terminal buffer hidden
+  elseif bufwinnr(g:terminal_buffer) == -1
+    exec 'sbuffer ' . g:terminal_buffer
+    wincmd L
+    "wincmd H
+  endif
+  " join lines with "\<cr>", note the extra "\<cr>" for last line
+  " send joined lines to terminal.
+  call term_sendkeys(g:terminal_buffer,
+        \ join(getline(a:lnum1, a:lnum2), "\<cr>") . "\<cr>")
+endfunction
+
+function s:cmd_on_term(cmd)
+    " get terminal buffer
+    let g:terminal_buffer = get(g:, 'terminal_buffer', -1)
+    " open new terminal if it doesn't exist
+    if g:terminal_buffer == -1 || !bufexists(g:terminal_buffer)
+        terminal
+        let g:terminal_buffer = bufnr('')
+        wincmd L
+        " split a new window if terminal buffer hidden
+    elseif bufwinnr(g:terminal_buffer) == -1
+        exec 'sbuffer ' . g:terminal_buffer
+        wincmd L
+        "wincmd H
+    endif
+    "call term_sendkeys(g:terminal_buffer,"<CTRL-C>")
+    call term_sendkeys(g:terminal_buffer,a:cmd . "\<cr>")
+endfunction
+command! -range ExecOnTerm call s:exec_on_term(<line1>, <line2>)
+nnoremap ,ex :ExecOnTerm<cr>
+vnoremap ,ex :ExecOnTerm<cr>
+command! Make call s:cmd_on_term("make")
+nnoremap ,d :Make<cr>
 
 " Disable highlight when <leader><cr> is pressed
 nnoremap <silent> <leader><cr> :noh<cr>
@@ -346,6 +406,7 @@ let g:netrw_winsize = 20
 let g:ycm_key_invoke_completion = '<c-k>'
 let g:ycm_semantic_triggers =  {
     \ 'c': ['re!\w{2}'],
+    \ 'python': ['re!\w{3}'],
     \}
 let g:ycm_python_interpreter_path = '/usr/local/bin/python3'
 let g:ycm_python_sys_path = []
@@ -361,6 +422,7 @@ let g:ycm_collect_identifiers_from_tags_files = 1
 " ============airline=============
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#left_alt_sep = '>'
+"let g:airline#extensions#tabline#ignore_buffadd_pat='gundo|undotree|vimfiler|tagbar|nerd_tree|startify|!'
 " ============Ultisnips=============
 " Trigger configuration. Do not use <tab> if you use https://github.com/Valloric/YouCompleteMe.
 let g:UltiSnipsExpandTrigger="<c-j>"
@@ -380,13 +442,13 @@ let g:snips_github="huaiyizhao"
 " <visual>S<target>
 " yss<target> operates on current line
 " ============TagBar=============
-nmap ,tt :TagbarToggle<CR>
+nmap ,tb :TagbarToggle<CR>
 let g:tagbar_autofocus = 0
 let g:tagbar_sort = 0
 " ============EasyMotion=============
 let g:EasyMotion_do_mapping = 0 " Disable default mappings
 " notice below can't use noremap because of <Plug>
-nmap <leader>s <Plug>(easymotion-overwin-f2)
+nmap <leader>f <Plug>(easymotion-overwin-f2)
 nmap <leader>l <Plug>(easymotion-lineforward)
 nmap <leader>j <Plug>(easymotion-j)
 nmap <leader>k <Plug>(easymotion-k)
