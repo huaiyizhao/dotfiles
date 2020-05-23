@@ -2,6 +2,9 @@
 " in search :s/\v turn on very magic and you don't need to write a lot of \
 "           .{-} is the none greedy mode for .*?
 " in replace :s/(some regex)/\1/ \1 refer to the first selected regex parttern
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Plugins
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 set nocompatible              " be iMproved, required
 filetype off                  " required
 
@@ -46,30 +49,15 @@ Plug 'chiel92/vim-autoformat'
 call plug#end()            " required
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => General
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Sets how many lines of history VIM has to remember
-set history=500
-set noshowmode
-" Enable filetype plugins
-filetype plugin on
-filetype indent on
-
-" Remove auto comments
-autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
-" Set to auto read when a file is changed from the outside
-set autoread
-
-" :W sudo saves the file 
-" (useful for handling the permission-denied error)
-command W w !sudo tee % > /dev/null
-
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => VIM user interface
+" => General and user interface
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Set 7 lines to the cursor - when moving vertically using j/k
 " Minimal number of screen lines to keep above and below the cursor.
+
+" Sets how many lines of history VIM has to remember
+set path+=**
+set history=500
+set noshowmode
 set so=7
 
 " Turn on the Wild menu
@@ -152,11 +140,21 @@ set encoding=utf8
 
 " Use Unix as the standard file type
 set ffs=unix,dos,mac
-
-
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Files, backups and undo
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Enable filetype plugins
+filetype plugin on
+filetype indent on
+
+" Remove auto comments
+autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
+" Set to auto read when a file is changed from the outside
+set autoread
+
+" :W sudo saves the file 
+" (useful for handling the permission-denied error)
+command W w !sudo tee % > /dev/null
 " Turn backup off, since most stuff is in SVN, git et.c anyway...
 set nobackup
 set nowb
@@ -188,7 +186,7 @@ set si "Smart indent
 set wrap "Wrap lines
 set showbreak=>\ 
 
-""""""""""""""""""""""""""""""
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Some useful mappings
 """"""""""""""""""""""""""""""
 " 0 jump to non-blank character
@@ -255,8 +253,30 @@ nnoremap ,ev :vsplit $MYVIMRC<cr>
 " Save to mac's clipboard
 nnoremap ,cp :%w !pbcopy<cr>
 
+" Disable highlight when <leader><cr> is pressed
+nnoremap <silent> <leader><cr> :noh<cr>
 
-"====================terminal========================
+" Autocomplete { , useful in C family language
+inoremap {<CR>  {<CR>}<Esc>O
+inoremap {}     {}
+
+" Add quotes on selected area
+vnoremap <leader>" <esc>`<<esc>i"<esc>`>a"<esc>
+vnoremap <leader>' <esc>`<<esc>i'<esc>`>a'<esc>
+
+" Add quotes to word on normal mode
+nnoremap <leader>" viw<esc>a"<esc>bi"<esc>lel
+nnoremap <leader>' viw<esc>a'<esc>bi'<esc>lel
+
+" Escape in insert mode
+inoremap jk <esc>
+" Force me to abandon escape key on stupid touchbar
+"inoremap <esc> <nop>
+" Open the last buffer on the right
+nnoremap <leader>lb :execute "rightbelow vsplit " . bufname("#")<cr>
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"====================terminal(replaced by tmux)==================
 "function! ExitNormalMode()
     "unmap <buffer> <silent> <RightMouse>
     "call feedkeys("a")
@@ -314,30 +334,7 @@ nnoremap ,ex :ExecOnTerm<cr>
 vnoremap ,ex :ExecOnTerm<cr>
 command! Make call s:cmd_on_term("make")
 nnoremap ,d :Make<cr>
-
-" Disable highlight when <leader><cr> is pressed
-nnoremap <silent> <leader><cr> :noh<cr>
-
-" Autocomplete { , useful in C family language
-inoremap {<CR>  {<CR>}<Esc>O
-inoremap {}     {}
-
-" Add quotes on selected area
-vnoremap <leader>" <esc>`<<esc>i"<esc>`>a"<esc>
-vnoremap <leader>' <esc>`<<esc>i'<esc>`>a'<esc>
-
-" Add quotes to word on normal mode
-nnoremap <leader>" viw<esc>a"<esc>bi"<esc>lel
-nnoremap <leader>' viw<esc>a'<esc>bi'<esc>lel
-
-" Escape in insert mode
-inoremap jk <esc>
-" Force me to abandon escape key on stupid touchbar
-"inoremap <esc> <nop>
-" Open the last buffer on the right
-nnoremap <leader>lb :execute "rightbelow vsplit " . bufname("#")<cr>
-
-"""""""""""""""""""""""""""""""
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Move around
 """""""""""""""""""""""""""""""
 " jump to the previous function
@@ -356,38 +353,7 @@ nnoremap k gk
 """""""""""""""""""""""""""""""
 onoremap in( :<c-u>normal! f(vi(<cr>
 onoremap il( :<c-u>normal! F)vi(<cr>
-"""""""""""""""""""""""""""""""
-" => Abbreviations
-"""""""""""""""""""""""""""""""
-
-
-"""""""""""""""""""""""""""""""
-" => Personal Plugin
-"""""""""""""""""""""""""""""""
-
-" ============ grep code =====================
-"function! s:GrepOperator(type)
-    "let saved_unnamed_register = @@
-
-    "if a:type ==# 'v'
-        "normal! `<v`>y
-    "elseif a:type ==# 'char'
-        "normal! `[v`]y
-    "else
-        "return
-    "endif
-
-    "silent execute "grep! -R " . shellescape(@@) . " ."
-    "copen
-
-    "let @@ = saved_unnamed_register
-"endfunction
-
-"nnoremap <leader>g :set operatorfunc=<SID>GrepOperator<cr>g@
-"vnoremap <leader>g :<c-u>call <SID>GrepOperator(visualmode())<cr>
-
-
-"""""""""""""""""""""""""""""""
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Plugin configuration
 """""""""""""""""""""""""""""""
 
