@@ -15,11 +15,14 @@ if empty(glob('~/.vim/autoload/plug.vim'))
 endif
 call plug#begin()
 
+" multi-cursor support
+Plug 'mg979/vim-visual-multi', {'branch': 'master'}
 Plug 'tomasr/molokai'
 Plug 'vim-airline/vim-airline'
 Plug 'ap/vim-css-color'
 "Plug 'ervandew/supertab'
-Plug 'valloric/youcompleteme'
+"Plug 'davidhalter/jedi-vim'
+Plug 'ycm_core/YouCompleteMe'
 " Track the engine.
 Plug 'SirVer/ultisnips'
 " Snippets are separated from the engine. Add this if you want them:
@@ -30,6 +33,7 @@ Plug 'scrooloose/nerdtree'
 Plug 'tpope/vim-fugitive'
 " Easy comment
 Plug 'preservim/nerdcommenter'
+Plug 'vim-scripts/DoxygenToolkit.vim'
 " Easy change and add surroundings
 Plug 'tpope/vim-surround'
 " Tag list
@@ -46,6 +50,9 @@ Plug 'ctrlpvim/ctrlp.vim'
 Plug 'sjl/gundo.vim'
 " Autoformat
 Plug 'chiel92/vim-autoformat'
+" autocomplete parenthese
+Plug 'tmsvg/pear-tree'
+Plug 'CoatiSoftware/vim-sourcetrail'
 call plug#end()            " required
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -62,6 +69,7 @@ set so=7
 
 " Turn on the Wild menu
 set wildmenu
+"set wildmode=list
 
 " Ignore compiled files
 set wildignore=*.o,*~,*.pyc
@@ -123,7 +131,7 @@ set tm=500
 "set foldcolumn=1
 
 " show only menu when complete
-set completeopt=menu
+set completeopt-=preview
 
 set formatoptions+=tl
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -163,6 +171,14 @@ set noswapfile
 " Return to last edit position when opening files (You want this!)
 au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
 
+" Insert template codes for hdu excersice
+au BufNewFile *.cpp 0r ~/.vim/hdutemp.cpp | let IndentStyle = "cpp"
+au BufNewFile *.cc 0r ~/.vim/hdutemp.cpp | let IndentStyle = "cpp" | exe ":13"
+" Edit next file for hdu excersice
+nnoremap ,ne :NextQuestion<cr>
+command! NextQuestion silent! execute "%bd|e#|bd#" | execute "edit " . string(str2nr(expand('%:r'))+1) . ".cc" |execute ":w" | execute "%bd|e#|bd#"
+
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Text, tab and indent related
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -189,20 +205,22 @@ set showbreak=>\
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Some useful mappings
 """"""""""""""""""""""""""""""
+" Open tags in a preview buffer
+nnoremap <C-]> <Esc>:exe "ptjump " . expand("<cword>")<Esc>
 " 0 jump to non-blank character
 nnoremap 0 ^
 " With a map leader it's possible to do extra key combinations
 " like <leader>w saves the current file
 let mapleader = " "
 let maplocalleader = ","
-" paste with smart indent
+" paste with smart indent(may not need with auto format)
+"nnoremap p p=`]
+"nnoremap P P=`]
 " remider g; jump to last modified place
-nnoremap p p=`]
-nnoremap P P=`]
 " Fast saving
 nnoremap <leader>w :w!<cr>
 "nnoremap <leader>wq :wq!<cr>
-nnoremap <leader>q :q<cr>
+nnoremap <leader>q :qa!<cr>
 
 " Change case for the word before 
 inoremap <c-u> <esc>vb~ea
@@ -231,6 +249,7 @@ endfunction
 " Easy switch between buffers and tabs
 nnoremap <leader>n :bn<cr>
 nnoremap <leader>b :bp<cr>
+command! Bo silent! execute "%bd|e#|bd#"
 "nnoremap <leader>tn :tabnext<cr>
 "nnoremap <leader>tb :tabprevious<cr>
 " Go to tab by number
@@ -257,8 +276,8 @@ nnoremap ,cp :%w !pbcopy<cr>
 nnoremap <silent> <leader><cr> :noh<cr>
 
 " Autocomplete { , useful in C family language
-inoremap {<CR>  {<CR>}<Esc>O
-inoremap {}     {}
+"inoremap {<CR>  {<CR>}<Esc>O
+"inoremap {}     {}
 
 " Add quotes on selected area
 vnoremap <leader>" <esc>`<<esc>i"<esc>`>a"<esc>
@@ -292,25 +311,25 @@ nnoremap <leader>lb :execute "rightbelow vsplit " . bufname("#")<cr>
 
 "tmap <silent> <ScrollWheelUp> <c-w>:call EnterNormalMode()<CR>
 nnoremap ,te :vertical terminal<cr>
-function s:exec_on_term(lnum1, lnum2)
-  " get terminal buffer
-  let g:terminal_buffer = get(g:, 'terminal_buffer', -1)
-  " open new terminal if it doesn't exist
-  if g:terminal_buffer == -1 || !bufexists(g:terminal_buffer)
-    terminal
-    let g:terminal_buffer = bufnr('')
-    wincmd L
-  " split a new window if terminal buffer hidden
-  elseif bufwinnr(g:terminal_buffer) == -1
-    exec 'sbuffer ' . g:terminal_buffer
-    wincmd L
-    "wincmd H
-  endif
-  " join lines with "\<cr>", note the extra "\<cr>" for last line
-  " send joined lines to terminal.
-  call term_sendkeys(g:terminal_buffer,
-        \ join(getline(a:lnum1, a:lnum2), "\<cr>") . "\<cr>")
-endfunction
+"function s:exec_on_term(lnum1, lnum2)
+  "" get terminal buffer
+  "let g:terminal_buffer = get(g:, 'terminal_buffer', -1)
+  "" open new terminal if it doesn't exist
+  "if g:terminal_buffer == -1 || !bufexists(g:terminal_buffer)
+    "terminal
+    "let g:terminal_buffer = bufnr('')
+    "wincmd L
+  "" split a new window if terminal buffer hidden
+  "elseif bufwinnr(g:terminal_buffer) == -1
+    "exec 'sbuffer ' . g:terminal_buffer
+    "wincmd L
+    ""wincmd H
+  "endif
+  "" join lines with "\<cr>", note the extra "\<cr>" for last line
+  "" send joined lines to terminal.
+  "call term_sendkeys(g:terminal_buffer,
+        "\ join(getline(a:lnum1, a:lnum2), "\<cr>") . "\<cr>")
+"endfunction
 
 function s:cmd_on_term(cmd)
     " get terminal buffer
@@ -329,10 +348,10 @@ function s:cmd_on_term(cmd)
     "call term_sendkeys(g:terminal_buffer,"<CTRL-C>")
     call term_sendkeys(g:terminal_buffer,a:cmd . "\<cr>")
 endfunction
-command! -range ExecOnTerm call s:exec_on_term(<line1>, <line2>)
-nnoremap ,ex :ExecOnTerm<cr>
-vnoremap ,ex :ExecOnTerm<cr>
-command! Make call s:cmd_on_term("make")
+"command! -range ExecOnTerm call s:exec_on_term(<line1>, <line2>)
+"nnoremap ,ex :ExecOnTerm<cr>
+"vnoremap ,ex :ExecOnTerm<cr>
+command! Make call s:cmd_on_term("g++ " . expand('%:t') . "\n./a.out")
 nnoremap ,d :Make<cr>
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Move around
@@ -347,7 +366,12 @@ nnoremap <silent> ]f :call
 " use j k to move in visual lines
 nnoremap j gj
 nnoremap k gk
+vnoremap j gj
+vnoremap k gk
 
+" Ctrl-j k to move between windows
+nnoremap <C-J> <C-W>j
+nnoremap <C-K> <C-W>k
 """""""""""""""""""""""""""""""
 " => Operator-Pending Mappings
 """""""""""""""""""""""""""""""
@@ -368,23 +392,30 @@ let g:netrw_banner = 0
 let g:netrw_browse_split = 2
 let g:netrw_altv = 1
 let g:netrw_winsize = 20
+" ============Supertab=============
+"inoremap <tab> <c-x><c-o><c-p>
+let g:SuperTabDefaultCompletionType = "<c-x><c-o>"
 " ============ycm=============
 let g:ycm_key_invoke_completion = '<c-k>'
-let g:ycm_semantic_triggers =  {
-    \ 'c': ['re!\w{2}'],
-    \ 'python': ['re!\w{3}'],
-    \}
-let g:ycm_python_interpreter_path = '/usr/local/bin/python3'
-let g:ycm_python_sys_path = []
-let g:ycm_extra_conf_vim_data = [
-  \  'g:ycm_python_interpreter_path',
-  \  'g:ycm_python_sys_path'
-  \]
-let g:ycm_global_ycm_extra_conf="/Users/zhaohuaiyi/.vim/plugged/youcompleteme/third_party/ycmd/.ycm_extra_conf.py"
-let g:ycm_add_preview_to_completeopt = 0
-let g:ycm_seed_identifiers_with_syntax = 1
-let g:ycm_autoclose_preview_window_after_completion = 1
-let g:ycm_collect_identifiers_from_tags_files = 1
+"let g:ycm_semantic_triggers =  {
+    "\ 'c': ['re!\w{2}'],
+    "\ 'cpp': ['re!\w{2}'],
+    "\ 'python': ['re!\w{3}'],
+    "\}
+"let g:ycm_python_interpreter_path = '/usr/local/bin/python3'
+"let g:ycm_python_sys_path = []
+"let g:ycm_extra_conf_vim_data = [
+  "\  'g:ycm_python_interpreter_path',
+  "\  'g:ycm_python_sys_path'
+  "\]
+let g:ycm_global_ycm_extra_conf="/Users/zhaohuaiyi/.vim/plugged/YouCompleteMe/.ycm_extra_conf.py"
+let g:ycm_confirm_extra_conf = 0
+
+"let g:ycm_global_ycm_extra_conf="/Users/zhaohuaiyi/.vim/plugged/youcompleteme/config_files/cpp_config.py"
+"let g:ycm_add_preview_to_completeopt = 1
+"let g:ycm_seed_identifiers_with_syntax = 1
+"let g:ycm_autoclose_preview_window_after_completion = 1
+"let g:ycm_collect_identifiers_from_tags_files = 1
 " ============airline=============
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#left_alt_sep = '>'
@@ -438,4 +469,22 @@ au BufWrite * :Autoformat
 let g:autoformat_autoindent = 0
 let g:autoformat_retab = 0
 let g:autoformat_remove_trailing_spaces = 0
+" ============Doxygen=============
+"let g:DoxygenToolkit_briefTag_pre="@Synopsis  "
+"let g:DoxygenToolkit_paramTag_pre="@Param "
+"let g:DoxygenToolkit_returnTag="@Returns   "
+"let g:DoxygenToolkit_blockHeader="-------------------------------"
+"let g:DoxygenToolkit_blockFooter="---------------------------------"
+let g:DoxygenToolkit_authorName="Huaiyi Zhao"
+let g:DoxygenToolkit_versionString="0.1"
+"let g:DoxygenToolkit_licenseTag="My own license" <-- !!! Does not end with "\<enter>"
+
+" ============PairTree=============
+" Smart pairs are disabled by default:
+let g:pear_tree_smart_openers = 1
+let g:pear_tree_smart_closers = 1
+let g:pear_tree_smart_backspace = 1
+
+" If enabled, smart pair functions timeout after 30ms:
+let g:pear_tree_timeout = 30
 
