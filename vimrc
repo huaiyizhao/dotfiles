@@ -488,3 +488,5 @@ let g:pear_tree_smart_backspace = 1
 " If enabled, smart pair functions timeout after 30ms:
 let g:pear_tree_timeout = 30
 
+" ============SourceTrail support=============
+let g:sourcetrail_autostart = 1
